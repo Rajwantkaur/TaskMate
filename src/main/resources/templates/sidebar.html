@@ -1,0 +1,363 @@
+<aside xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:th="http://www.thymeleaf.org" th:fragment="sidebar"
+	class="main-sidebar sidebar-dark-primary elevation-4">
+	<!-- Brand Logo -->
+	<a href="/fbg/AggregateFeed" class="brand-link"> <img
+		src="/dist/img/c_logo.png" alt="AdminLTE Logo"
+		class="brand-image img-circle elevation-3" style="opacity: .8">
+		<span class="brand-text font-weight-light">Contexo</span>
+	</a>
+
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<!-- Sidebar user panel (optional) -->
+
+
+		<!-- Sidebar Menu -->
+		<nav class="mt-2">
+			<ul class="nav nav-pills nav-sidebar flex-column"
+				data-widget="treeview" role="menu" data-accordion="false">
+				<!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+
+				<li sec:authorize="hasRole('HIDDEN')"
+					th:class="${#request.getRequestURI().equals('/') or #request.getRequestURI().equals('/index')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/') or #request.getRequestURI().equals('/index')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Dashboard <i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/index"
+							th:class="${#request.getRequestURI().equals('/') or #request.getRequestURI().equals('/index')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Dashboard v1</p>
+						</a></li>
+						<li class="nav-item"><a href="/index2" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Dashboard v2</p>
+						</a></li>
+						<li class="nav-item"><a href="/index3" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Dashboard v3</p>
+						</a></li>
+					</ul>
+				</li><li sec:authorize="hasAuthority('ADMIN')"
+					th:class="${#request.getRequestURI().startsWith('/users') or #request.getRequestURI().startsWith('users/edit')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/users')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							List of Users<i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/users"
+							th:class="${#request.getRequestURI().startsWith('/users') or #request.getRequestURI().startsWith('/users/edit')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>UserList</p>
+						</a></li>
+					</ul>
+				</li>
+				
+				<li sec:authorize="hasAuthority('MANAGER')"
+					th:class="${#request.getRequestURI().equals('/manager/uploadSeeker') or #request.getRequestURI().equals('/manager/masterConfigurationList') or #request.getRequestURI().equals('/manager/addNewMasterConfiguration') or #request.getRequestURI().startsWith('/manager/addSchedler') or #request.getRequestURI().startsWith('/manager/schedulerList') or #request.getRequestURI().startsWith('/manager/SeekerFileInfoMappingList') or #request.getRequestURI().startsWith('/manager/SeekerFileInfoList')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/manager/uploadSeeker') or #request.getRequestURI().equals('/manager/masterConfigurationList') or #request.getRequestURI().equals('/manager/addNewMasterConfiguration') or #request.getRequestURI().startsWith('/manager/addSchedler') or #request.getRequestURI().startsWith('/manager/schedulerList') or #request.getRequestURI().startsWith('/manager/SeekerFileInfoMappingList') or #request.getRequestURI().startsWith('/manager/SeekerFileInfoList')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-chart-pie"></i>
+						<p>
+							Seekers Import <i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/manager/uploadSeeker"
+							th:class="${#request.getRequestURI().equals('/manager/uploadSeeker')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Upload</p>
+						</a></li>
+					</ul>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a
+							href="/manager/masterConfigurationList"
+							th:class="${#request.getRequestURI().equals('/manager/masterConfigurationList') or #request.getRequestURI().equals('/manager/addNewMasterConfiguration') or #request.getRequestURI().startsWith('/manager/addSchedler') or #request.getRequestURI().startsWith('/manager/schedulerList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Configuration</p>
+						</a></li>
+					</ul>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a
+							href="/manager/SeekerFileInfoMappingList"
+							th:class="${#request.getRequestURI().equals('/manager/SeekerFileInfoMappingList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Upload report</p>
+						</a></li>
+					</ul>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/manager/SeekerFileInfoList"
+							th:class="${#request.getRequestURI().equals('/manager/SeekerFileInfoList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Download report</p>
+						</a></li>
+					</ul>
+				</li>
+
+				<li sec:authorize="hasAuthority('MANAGER')"
+					th:class="${#request.getRequestURI().equals('/manager/GoogleJobsReportingList') or #request.getRequestURI().equals('/manager/ExportJobConfigurationList')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/manager/GoogleJobsReportingList') or #request.getRequestURI().equals('/manager/ExportJobConfigurationList')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Google <i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/api/googleJobsReportingList"
+							th:class="${#request.getRequestURI().equals('/api/googleJobsReportingList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Reporting</p>
+						</a></li>
+						<li class="nav-item"><a
+							href="/api/googleJobConfigurationList"
+							th:class="${#request.getRequestURI().equals('/api/googleJobConfigurationList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Configuration</p>
+						</a></li>
+					</ul>
+				</li>
+				<li sec:authorize="hasAnyAuthority('CLIENT','MANAGER')"
+					th:class="${#request.getRequestURI().equals('/fbg/CountryList') or #request.getRequestURI().equals('/fbg/BatchList') or #request.getRequestURI().equals('/fbg/ExportTablesList')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/fbg/CountryList') or #request.getRequestURI().equals('/fbg/BatchList') or #request.getRequestURI().equals('/fbg/ExportTablesList')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Global Jobs Configurations<i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/fbg/ExportTablesList"
+							th:class="${#request.getRequestURI().equals('/fbg/ExportTablesList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Supported Export Tables</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/CountryList"
+							th:class="${#request.getRequestURI().equals('/fbg/CountryList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Supported Countries</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/BatchList"
+							th:class="${#request.getRequestURI().equals('/fbg/BatchList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Batch Configuration</p>
+						</a></li>
+
+					</ul>
+				</li>
+
+				<li sec:authorize="hasAnyAuthority('CLIENT','MANAGER')"
+					th:class="${#request.getRequestURI().equals('/fbg/AggregateFeed') or #request.getRequestURI().equals('/fbg/FeedOrderSchedulesList') or #request.getRequestURI().startsWith('/fbg/ProcessList1')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/fbg/AggregateFeed') or #request.getRequestURI().equals('/fbg/FeedOrderSchedulesList') or #request.getRequestURI().startsWith('/fbg/ProcessList1') ?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Child Feed Orders<i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/fbg/AggregateFeed"
+							th:class="${#request.getRequestURI().equals('/fbg/AggregateFeed')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Aggregate View</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/FeedOrderSchedulesList"
+							th:class="${#request.getRequestURI().equals('/fbg/FeedOrderSchedulesList')  or #request.getRequestURI().startsWith('/fbg/xxx') ?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Feed Order Schedules</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/ProcessList1"
+							th:class="${#request.getRequestURI().equals('/fbg/ProcessList1')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Child Feed Order</p>
+						</a></li>
+					</ul>
+				</li>
+
+				<li sec:authorize="hasAnyAuthority('CLIENT','MANAGER')"
+					th:class="${#request.getRequestURI().startsWith('/fbg/MasterFeedOrderList') or #request.getRequestURI().equals('/fbg/excludeTitleForm') or #request.getRequestURI().equals('/fbg/excludeCompanyForm') ?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().startsWith('/fbg/MasterFeedOrderList')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Import Onboarding Form<i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+
+						<li class="nav-item"><a href="/fbg/MasterFeedOrderList"
+							th:class="${#request.getRequestURI().equals('/fbg/MasterFeedOrderList')  or #request.getRequestURI().startsWith('/fbg/addMasterFeedOrder') or #request.getRequestURI().startsWith('/fbg/editMasterFeedOrder')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Onboarding Form</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/excludeTitleForm"
+							th:class="${#request.getRequestURI().equals('/fbg/excludeTitleForm')  or #request.getRequestURI().startsWith('/fbg/addTitle') or #request.getRequestURI().startsWith('/fbg/editTitle')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Exclude Titles Form</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/excludeCompanyForm"
+							th:class="${#request.getRequestURI().equals('/fbg/excludeCompanyForm')  or #request.getRequestURI().startsWith('/fbg/addCompany') or #request.getRequestURI().startsWith('/fbg/editCompany')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Exclude Company Form</p>
+						</a></li>
+					</ul>
+				</li>
+
+				<li sec:authorize="hasAnyAuthority('CLIENT','MANAGER')"
+					th:class="${#request.getRequestURI().equals('/fbg/ParsingProgressInfoList') or #request.getRequestURI().equals('/fbg/ImportCloudStats') or #request.getRequestURI().equals('/fbg/ParsingImportReportList') or #request.getRequestURI().equals('/fbg/activePieChart') or #request.getRequestURI().equals('/fbg/inactivePieChart') or  #request.getRequestURI().equals('/fbg/ImportCloudStats')  or #request.getRequestURI().equals('/fbg/CloudUploadStats')  or #request.getRequestURI().equals('/fbg/CloudDeleteStats') ?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/fbg/ParsingProgressInfoList') or #request.getRequestURI().equals('/fbg/ImportCloudStats') or #request.getRequestURI().equals('/fbg/ParsingImportReportList') or #request.getRequestURI().equals('/fbg/activePieChart')  or #request.getRequestURI().equals('/fbg/inactivePieChart')  or #request.getRequestURI().equals('/fbg/ImportCloudStats')  or #request.getRequestURI().equals('/fbg/CloudUploadStats')  or #request.getRequestURI().equals('/fbg/CloudDeleteStats')  ?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Import Reporting Stats<i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+
+						<li class="nav-item"><a href="/fbg/activePieChart"
+							th:class="${#request.getRequestURI().equals('/fbg/activePieChart')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Active Import Chart</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/inactivePieChart"
+							th:class="${#request.getRequestURI().equals('/fbg/inactivePieChart')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Inactive Import Chart</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/ParsingImportReportList"
+							th:class="${#request.getRequestURI().equals('/fbg/ParsingImportReportList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Import Report</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/ParsingProgressInfoList"
+							th:class="${#request.getRequestURI().equals('/fbg/ParsingProgressInfoList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Parsing Stats</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/ImportCloudStats"
+							th:class="${#request.getRequestURI().equals('/fbg/ImportCloudStats')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Elastic Search Webhook</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/CloudUploadStats"
+							th:class="${#request.getRequestURI().equals('/fbg/CloudUploadStats')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Elastic Search Upload Stats</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/CloudDeleteStats"
+							th:class="${#request.getRequestURI().equals('/fbg/CloudDeleteStats')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Elastic Search Delete Stats</p>
+						</a></li>
+
+					</ul>
+				</li>
+
+				<li sec:authorize="hasAnyAuthority('CLIENT','MANAGER')"
+					th:class="${#request.getRequestURI().equals('/fbg/JobExportPartnerList') or #request.getRequestURI().equals('/fbg/MultiTitlesList') or #request.getRequestURI().equals('/fbg/FelonFriendlyList') or #request.getRequestURI().equals('/fbg/MultiCompanyList')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/fbg/JobExportPartnerList') or #request.getRequestURI().equals('/fbg/MultiTitlesList') or #request.getRequestURI().equals('/fbg/FelonFriendlyList') or #request.getRequestURI().equals('/fbg/MultiCompanyList')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Export Onboarding Form<i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/fbg/JobExportPartnerList"
+							th:class="${#request.getRequestURI().equals('/fbg/JobExportPartnerList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Onboarding Form</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/MultiTitlesList"
+							th:class="${#request.getRequestURI().equals('/fbg/MultiTitlesList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>MultiTitles Configuration</p> <!-- </a></li>
+						<li class="nav-item"><a href="/fbg/FelonFriendlyList"
+							th:class="${#request.getRequestURI().equals('/fbg/FelonFriendlyList')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>FelonFriendly Configuration</p>
+						</a></li> -->
+								<li class="nav-item"><a href="/fbg/MultiCompanyList"
+									th:class="${#request.getRequestURI().equals('/fbg/MultiCompanyList')?'nav-link active':'nav-link'}">
+										<i class="far fa-circle nav-icon"></i>
+										<p>MultiCompany Configuration</p>
+								</a></li>
+					</ul>
+				</li>
+
+				<li sec:authorize="hasAnyAuthority('CLIENT','MANAGER')"
+					th:class="${#request.getRequestURI().equals('/fbg/ExportMySqlLoaderStats')  or #request.getRequestURI().equals('/fbg/MysqlLoaderStat') or #request.getRequestURI().equals('/fbg/ExportStats') or #request.getRequestURI().equals('/fbg/ExportWebhookStats') ?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/fbg/ExportMySqlLoaderStats') or #request.getRequestURI().equals('/fbg/MysqlLoaderStat') or #request.getRequestURI().equals('/fbg/ExportStats') or #request.getRequestURI().equals('/fbg/ExportWebhookStats') ?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Export Reporting Stats <i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/fbg/ExportMySqlLoaderStats"
+							th:class="${#request.getRequestURI().equals('/fbg/ExportMySqlLoaderStats') ?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>MySql Webhook</p>
+						</a></li>
+
+						<li class="nav-item"><a href="/fbg/MysqlLoaderStat"
+							th:class="${#request.getRequestURI().equals('/fbg/MysqlLoaderStat')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Mysql Loader Stats</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/ExportStats"
+							th:class="${#request.getRequestURI().equals('/fbg/ExportStats')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Export Stats</p>
+						</a></li>
+						<li class="nav-item"><a href="/fbg/ExportWebhookStats"
+							th:class="${#request.getRequestURI().equals('/fbg/ExportWebhookStats')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Export Webhook Stats</p>
+						</a></li>
+
+					</ul>
+				</li>
+
+				<li sec:authorize="hasAnyAuthority('CLIENT','MANAGER')"
+					th:class="${#request.getRequestURI().startsWith('/fbg/JobApiTestList') or #request.getRequestURI().startsWith('/fbg/addJobApiTest') or #request.getRequestURI().startsWith('/fbg/editJobApiTest')?'nav-item has-treeview menu-open':'nav-item has-treeview'}">
+					<a href="#"
+					th:class="${#request.getRequestURI().equals('/fbg/JobApiTestList')?'nav-link active':'nav-link'}">
+						<i class="nav-icon fas fa-tachometer-alt"></i>
+						<p>
+							Job API Testing <i class="right fas fa-angle-left"></i>
+						</p>
+				</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item"><a href="/fbg/JobApiTestList"
+							th:class="${#request.getRequestURI().startsWith('/fbg/JobApiTestList') or #request.getRequestURI().startsWith('/fbg/addJobApiTest') or #request.getRequestURI().startsWith('/fbg/editJobApiTest')?'nav-link active':'nav-link'}">
+								<i class="far fa-circle nav-icon"></i>
+								<p>TestPad</p>
+						</a></li>
+					</ul>
+				</li>
+				
+
+			</ul>
+		</nav>
+		<!-- /.sidebar-menu -->
+	</div>
+	<!-- /.sidebar -->
+</aside>

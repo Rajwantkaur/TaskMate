@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Sign Up - TaskMate</title>
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<script type="text/javascript"
+	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div th:replace="~{header :: commonHeader}"></div>
+	<div class="container  text-center">
+		<div class="starter-template">
+			<fieldset>
+				<h2>TaskMate</h2>
+
+				<form th:action="@{/user_register}" th:object="${user}"
+					method="post" style="max-width: 600px; margin: auto;">
+					<div class="border border-secondary rounded p-4">
+						<div class="m-6">
+							<div class="form-group row">
+								<label class=" col-4 col-form-label">E-mail ID: </label>
+								<div class="col-8">
+									<input type="email" th:field="*{email}" class="form-control"
+										placeholder="Enter Your Email" required autofocus />
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class=" col-4 col-form-label"> Password: </label>
+								<div class="col-8">
+									<input type="password" th:field="*{password}"
+										class="form-control" placeholder="Enter Password" required
+										autofocus minlength="6" maxlength="10" />
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class=" col-4 col-form-label">First Name: </label>
+								<div class="col-8">
+									<input type="text" th:field="*{firstName}" class="form-control"
+										placeholder="Enter Firstname" required minlength="2"
+										maxlength="20" />
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class=" col-4 col-form-label">Last Name: </label>
+								<div class="col-8">
+									<input type="text" th:field="*{lastName}" class="form-control"
+										placeholder="Enter Lastname" required autofocus minlength="2"
+										maxlength="20" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class=" col-4 col-form-label">Username: </label>
+								<div class="col-8">
+									<input type="text" th:field="*{userName}" class="form-control"
+										placeholder="Enter Username" required autofocus minlength="2"
+										maxlength="20" />
+								</div>
+							</div>
+
+							<div>
+								<button type="submit" class="btn btn-primary ">Sign Up</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</fieldset>
+		</div>
+	</div>
+</body>
+</html>

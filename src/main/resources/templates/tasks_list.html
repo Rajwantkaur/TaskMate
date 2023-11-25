@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header::commonHeader">
+<title>Tasks List</title>
+</head>
+<body class="hold-transition sidebar-mini">
+	<div class="wrapper">
+
+		<!-- Navbar -->
+		<div th:replace="navbar:: navigbar"></div>
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<div th:replace="sidebar:: sidebar"></div>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1>Onboarding Configuration</h1>
+						</div>
+						
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Onboarding</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="row">
+					<div class="col-12">
+
+						<div class="card">
+							<div class="card-header">
+								<div class="row">
+									<div class="col-md-6">
+										<h3 class="card-title">Onboarding Configuration</h3>
+									</div>
+									<div class="col-md-6 float-right">
+										<button class="btn bg-gradient-primary float-right"
+											onclick="location.href='/fbg/addMasterFeedOrder'">Add New</button>
+									</div>
+								</div>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								<table id="ExportJobConfigurationList" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>Id</th>
+											<th>Name</th>
+											<!-- <th>Max Jobs</th> -->
+											<th>Status</th>
+											<!-- <th>Effective CPC</th>
+											<th>Gross CPC</th> -->
+											<th>Click Diff</th>
+											<th>Source Id</th>
+											<th>Infeed CPC</th>
+											<th>Effective CPC</th>
+											<th>Update Time</th>
+											<!-- <th>Job Count</th> -->
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+							<!-- /.card-body -->
+						</div>
+						<!-- /.card -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<div th:replace="footer:: foot"></div>
+
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+	<div th:replace="footerjs:: commonfootjs"></div>
+
+	<script>
+
+    function onActionDelete(id){
+        console.log("onActionDelete");
+        console.log(id)
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+            $.ajax({
+                type: "DELETE",
+                url: "[[${@environment.getProperty('feed.order.base_url')}]]/api/MasterFeedOrder/deleteById/"+id,
+                success: function(response){
+                    console.log(response)
+                    if(response.status===200){
+                        table.ajax.reload();
+                        toastr.success(response.message);
+                    }else{
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText)
+                    var err = eval("(" + xhr.responseText + ")");
+                    toastr.error(err.message);
+                }
+
+            });
+        }
+    });
+
+
+
+    }
+
+  var table;
+  $(document)
+      .ready(
+          function() {
+
+              table = $('#ExportJobConfigurationList')
+                  .DataTable(
+                      {
+                          "fnDrawCallback": function (oSettings) {
+                              // Callback after data drawn
+                              $(".statusSwitchBtn").each(function() {
+                                  $(this).bootstrapSwitch('state', $(this).prop('checked'));
+                              });
+
+                              $('.statusSwitchBtn').on('switchChange.bootstrapSwitch', function (event, state) {
+                                  var masterFeedOrderId=$(this).attr("rowId");
+                                  var rowName=$(this).attr("rowName");
+                                  var isActive=$(this).is(":checked");
+                                  $.ajax({
+                                      type: "PUT",
+                                      url: "[[${@environment.getProperty('feed.order.base_url')}]]/api/MasterFeedOrder/toggleStatus/"+masterFeedOrderId+"?status="+isActive,
+                                      dataType: "json",
+                                      contentType : "application/json",
+                                      success: function(response){
+                                          console.log(response)
+                                          if(response.status===200){
+                                              toastr.success(response.message);
+                                              Swal.fire({
+                                                  title: 'Success',
+                                                  text: rowName+" is "+(isActive?" enabled":" disabled"),
+                                                  icon: 'success',
+                                                  confirmButtonColor: '#3085d6',
+                                                  confirmButtonText: 'Okay'
+                                              }).then((result) => {
+                                                  if (result.value) {
+                                                  window.location.reload();
+                                              }
+                                          });
+                                          }else{
+                                              Swal.fire(
+                                                  'Failed !',
+                                                  response.message,
+                                                  'error'
+                                              )
+                                              toastr.error(response.message);
+                                          }
+                                      },
+                                      error: function(xhr, status, error) {
+                                          console.log(xhr.responseText)
+                                          var err = eval("(" + xhr.responseText + ")");
+                                          toastr.error(err.message);
+                                          Swal.fire(
+                                              'Failed !',
+                                              err.message,
+                                              'error'
+                                          )
+                                      }
+
+                                  });
+
+
+
+                              });
+                          },
+                          "paging": true,
+                          "lengthChange": true,
+                          "searching": true,
+                          "ordering": true,
+                          "info": true,
+                          "autoWidth": false,
+                          "responsive": true,
+                          ajax : {
+                              url : '[[${@environment.getProperty("feed.order.base_url")}]]/api/MasterFeedOrder/datatableRequest',
+                              type : 'GET',
+                              "data" : function(data) {
+                                  // process data before sent to server.
+                              }
+                          },
+                          'serverSide' : true,
+                          'stateSave' : true,
+
+                          "processing" : true,
+                          "language" : {
+                              "processing" : "<div class='btn btn-sm btn-primary'>Loading...</div>" //add a loading image,simply putting <img src="loader.gif" /> tag.
+                          },
+                          "serverSide" : true,
+                          "pageLength" : 10,
+                          lengthMenu : [
+                              [ 10, 25, 50, 100, 500 ],
+                              [ '10', '25', '50', '100', '500' ] ],
+                          "columnDefs": [{
+                              "targets": '_all',
+                              "defaultContent": ""
+                          }],
+                          "columns" : [
+                              {
+                                  "data" : "id",
+                                  orderable : true,
+                                  searchable : true
+                              },
+                              {
+                                  "data" : "name",
+                                  orderable : true,
+                                  searchable : true
+                              },
+                            /*   {
+                                  "data" : "max_jobs",
+                                  orderable : true,
+                                  searchable : false
+                              }, */
+                              {
+                                  "data" : "id",
+                                  "render": function ( data, type, row , meta) {
+                                      var checked=row.status?"checked":"";
+                                      return '<input '+checked+'  type="checkbox" rowName="'+row.name+'" rowId="'+data+'" class="statusSwitchBtn" data-bootstrap-switch data-off-color="danger" data-on-color="success" data-on-text="on" data-off-text="off">';
+                                  }
+                              },
+                              /* {
+                                  "data" : "effective_cpc",
+                                  orderable : true,
+                                  searchable : false
+                              },
+                              {
+                                  "data" : "gross_cpc",
+                                  orderable : true,
+                                  searchable : false
+                              }, */
+                              {
+                                  "data" : "click_diff",
+                                  orderable : true,
+                                  searchable : false
+                              },
+                              {
+                                  "data" : "source_id",
+                                  orderable : true,
+                                  searchable : true
+                              },
+                              {
+                                  "data" : "in_feed_cpc",
+                                  searchable : false,
+                                  "render": function ( data, type, row , meta) {
+                                      if(data){
+                                          return '<button type="button" class="btn btn-block bg-gradient-success btn-sm" >'+data+'</button>';
+                                      }else{
+                                          return '<button type="button" class="btn btn-block bg-gradient-orange btn-sm" >'+data+'</button>';
+                                      }
+                                  }
+                              },
+                             {
+                                  "data" : "effective_cpc",
+                                  orderable : true,
+                                  searchable : true
+                              }, 
+                              {
+                                  "data" : "updated_at",
+                                  orderable : true,
+                                  searchable : false
+                              },
+                             /*  {
+                            	  "data" : "job_count",
+                            	  orderable : true,
+                            	  searchable : false
+                           	  }, */
+                              {
+                                  "data" : "id",
+                                  "render": function ( data, type, row , meta) {
+                                      return '<div class="input-group input-group-sm">\n' +
+                                          '                  <div class="input-group-prepend">\n' +
+                                          '                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">\n' +
+                                          '                      Action\n' +
+                                          '                    </button>\n' +
+                                          '                    <ul class="dropdown-menu">\n' +
+                                          '                      <li class="dropdown-item"><a onclick="onActionDelete('+data+')" href="#">Delete</a></li>\n' +
+                                          '                      <li class="dropdown-item"><a href="/fbg/editMasterFeedOrder/'+data+'">Edit</a></li>\n' +
+                                          '                      <li class="dropdown-divider"></li>\n' +
+                                          '                      <li class="dropdown-item"><a href="/fbg/editMasterFeedOrder/'+data+'?readonly=true">View Detail</a></li>\n' +
+                                          '                      <li class="dropdown-divider"></li>\n' +
+                                          '                      <li class="dropdown-item"><a href="/fbg/copyMasterFeedOrder/'+data+'?copy=true">Copy Form</a></li>\n' +
+                                          '                    </ul>\n' +
+                                          '                  </div>\n' +
+                                          '                </div>';
+                                  }
+                              }]
+
+                      });
+              
+          });
+
+
+</script>
+</body>
+</html>

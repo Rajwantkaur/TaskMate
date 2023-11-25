@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header::commonHeader"></head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <div th:replace="navbar:: navigbar"></div>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <div th:replace="sidebar:: sidebar"></div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Create Task Categories</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Create Task Categories</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="row">
+                <div class="col-md-6">
+                  <h3 class="card-title">Create Task Categories</h3>
+                </div>
+                <div class="col-md-6 float-right">
+                  <a th:href="@{~/fbg/addFeedOrderType1}"><button class="btn bg-gradient-primary float-right" >Add Category</button></a>
+                </div>
+									<div class="col-md-6">
+										<label for="countryId">Select Country</label> <select
+											class="form-control select2" id="countryId" name="countryId">
+											<option th:each="countryMap : ${countryList}"
+												th:value="${countryMap.get('id')}"
+												th:text="${ countryMap.get('shortName') +'-'+ countryMap.get('fullName')} "></option>
+										</select>
+									</div>
+								</div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="FeedOrderType" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Schedule</th>
+                  <th>Child Feed Order</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <div th:replace="footer:: foot"></div>
+
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+<div th:replace="footerjs:: commonfootjs"></div>
+
+<script>
+    var table;
+    $(document).ready(function() {
+        $("#countryId").on("change",function(){
+            reloadTable();
+        });
+
+    });
+
+    function reloadTable() {
+        var countryId= $("#countryId").val();
+        if(countryId){
+            var newUrl = '[[${@environment.getProperty("feed.order.base_url")}]]/api/FeedOrderType/datatableRequest/'+countryId;
+            table.ajax.url(newUrl).load();
+        }else{
+            toastr.error('No Countries Found');
+            table.ajax.url("/datatable/blank").load();
+        }
+    }
+
+    function onActionDelete(id){
+        console.log("onActionDelete");
+        console.log(id)
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+            $.ajax({
+                type: "DELETE",
+                url: "[[${@environment.getProperty('feed.order.base_url')}]]/api/FeedOrderType/deleteById/"+id,
+                success: function(response){
+                    console.log(response)
+                    if(response.status===200){
+                        table.ajax.reload();
+                        toastr.success(response.message);
+                    }else{
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText)
+                    var err = eval("(" + xhr.responseText + ")");
+                    toastr.error(err.message);
+                }
+
+            });
+        }
+    });
+
+
+
+    }
+
+    function onClickProcessBtn(id) {
+
+    }
+
+  $(document)
+      .ready(
+          function() {
+              table = $('#FeedOrderType')
+                  .DataTable(
+                      {
+                          "paging": true,
+                          "lengthChange": true,
+                          "searching": true,
+                          "ordering": true,
+                          "info": true,
+                          "autoWidth": false,
+                          "responsive": true,
+                          ajax : {
+                              url : '[[${@environment.getProperty("feed.order.base_url")}]]/api/FeedOrderType/datatableRequest/'+$("#countryId").val(),
+                              type : 'GET',
+                              "data" : function(data) {
+                                  // process data before sent to server.
+                              }
+                          },
+                          'serverSide' : true,
+                          'stateSave' : true,
+
+                          "processing" : true,
+                          "language" : {
+                              "processing" : "<div class='btn btn-sm btn-primary'>Loading...</div>" //add a loading image,simply putting <img src="loader.gif" /> tag.
+                          },
+                          "serverSide" : true,
+                          "pageLength" : 10,
+                          lengthMenu : [
+                              [ 10, 25, 50, 100, 500 ],
+                              [ '10', '25', '50', '100', '500' ] ],
+                          "columnDefs": [{
+                              "targets": '_all',
+                              "defaultContent": ""
+                          }],
+                          "columns" : [
+                              {
+                                  "data" : "id",
+                                  orderable : true,
+                                  searchable : true
+                              },
+                              {
+                                  "data" : "name",
+                                  orderable : true,
+                                  searchable : true
+                              },
+                              {
+                                  "data" : "id",
+                                  "render": function ( data, type, row , meta) {
+                                      return '<a href="/fbg/ChildFeedOrdersList/'+data+'"><button type="button" class="btn btn-block bg-gradient-primary btn-sm" >Show Child Feed Order</button></a>';
+                                  }
+                              },
+                              {
+                                  "data" : "id",
+                                  "render": function ( data, type, row , meta) {
+                                      return '<div class="input-group input-group-sm">\n' +
+                                          '                  <div class="input-group-prepend">\n' +
+                                          '                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">\n' +
+                                          '                      Action\n' +
+                                          '                    </button>\n' +
+                                          '                    <ul class="dropdown-menu">\n' +
+                                          '                      <li class="dropdown-item"><a onclick="onActionDelete('+data+')" href="#">Delete</a></li>\n' +
+                                          '                      <li class="dropdown-item"><a href="/fbg/editFeedOrderType1/'+data+'">Edit</a></li>\n' +
+                                          '                      <li class="dropdown-divider"></li>\n' +
+                                          '                      <li class="dropdown-item"><a href="/fbg/editFeedOrderType1/'+data+'?readonly=true">View Detail</a></li>\n' +
+                                          '                    </ul>\n' +
+                                          '                  </div>\n' +
+                                          '                </div>';
+                                  }
+                              }
+                              ]
+
+                      });
+
+          });
+</script>
+</body>
+</html>
